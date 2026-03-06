@@ -1,4 +1,4 @@
-from Options import Toggle, DefaultOnToggle, DeathLink, Choice, PerGameCommonOptions, StartInventoryPool, OptionGroup
+from Options import Toggle, DefaultOnToggle, DeathLink, Choice, PerGameCommonOptions, StartInventoryPool, OptionGroup, T
 from dataclasses import dataclass
 
 
@@ -55,7 +55,16 @@ class StartingBook(Choice):
     option_intermediate = 1
     option_advanced = 2
     option_expert = 3
+    option_essentials = 4
+    option_alpine_greats = 5
+    option_arduous_arctic = 6
     default = 0
+
+    @classmethod
+    def get_option_name(cls, value: int) -> str:
+        if value == StartingBook.option_arduous_arctic:
+            return "Arduous & Arctic"
+        return super().get_option_name(value)
 
     def get_selected_book(self) -> str:
         if self.value == 0:
@@ -64,10 +73,14 @@ class StartingBook(Choice):
             return "Intermediate Book"
         elif self.value == 2:
             return "Advanced Book"
-        return "Expert Book"
-
-    def needs_ice_axes(self) -> bool:
-        return self.value in [3] # more will be added :p
+        elif self.value == 3:
+            return "Expert Book"
+        elif self.value == 4:
+            return "Essentials Book"
+        elif self.value == 5:
+            return "Alpine Greats Book"
+        elif self.value == 6:
+            return "Arduous & Arctic Book"
 
 class StartWithBarometer(DefaultOnToggle):
     """Choose to start with the barometer, to locate items quicker"""
@@ -146,6 +159,23 @@ class IncludeTimeAttack(DefaultOnToggle):
     """Adds beating peak time, hold and rope counts as checks"""
     display_name = "Include Time Attack Challenges"
 
+# DLC stuffs BELOW
+
+class EnableDLC(Toggle):
+    """Enables/Disables all content of the DLC"""
+    display_name = "Enable DLC"
+
+class EnableEssentials(DefaultOnToggle):
+    """Enables Essentials book, items and collectibles"""
+    display_name = "Enable Essentials Book"
+
+class EnableAlpineGreats(DefaultOnToggle):
+    """Enables Alpine Greats book, items and collectibles"""
+    display_name = "Enable Alpine Greats Book"
+
+class EnableArduousArctic(DefaultOnToggle):
+    """Enables Arduous & Arctic book, items and collectibles"""
+    display_name = "Enable Arduous & Arctic Book"
 
 poy_option_groups = [
     OptionGroup("Starting Items", [
@@ -167,6 +197,12 @@ poy_option_groups = [
         IncludeFreeSolo,
         IncludeTimeAttack
     ]),
+    OptionGroup("DLC", [
+        EnableDLC,
+        EnableEssentials,
+        EnableAlpineGreats,
+        EnableArduousArctic
+    ])
 ]
 
 poy_option_presets: dict[str, dict[str, any]] = {
@@ -218,3 +254,7 @@ class PeaksOfYoreOptions(PerGameCommonOptions):
     include_free_solo: IncludeFreeSolo
     include_time_attack: IncludeTimeAttack
     start_inventory_from_pool: StartInventoryPool
+    enable_dlc: EnableDLC
+    enable_essentials: EnableEssentials
+    enable_alpine_greats: EnableAlpineGreats
+    enable_arduous_arctic: EnableArduousArctic

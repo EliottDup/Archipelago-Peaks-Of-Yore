@@ -90,6 +90,9 @@ class PeaksOfWorld(World):
             "Intermediate Book": self.options.enable_intermediate,
             "Advanced Book": self.options.enable_advanced,
             "Expert Book": self.options.enable_expert,
+            "Essentials Book": self.options.enable_essentials and self.options.enable_dlc,
+            "Alpine Greats Book": self.options.enable_alpine_greats and self.options.enable_dlc,
+            "Arduous & Arctic Book": self.options.enable_arduous_arctic and self.options.enable_dlc
         }
 
         book_names: list[str] = list(starting_book_options)
@@ -233,4 +236,5 @@ class PeaksOfWorld(World):
 
     def fill_slot_data(self) -> dict[str, Any]:
         return self.options.as_dict("death_link", "goal", "rope_unlock_mode", "death_link_traps",
-                                    "game_mode", "disable_solemn_tempest", "include_free_solo", "include_time_attack", casing="camel")
+                                    "game_mode", "disable_solemn_tempest", "include_free_solo", "include_time_attack",
+                                    "enable_dlc", casing="camel")
