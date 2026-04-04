@@ -258,5 +258,5 @@ class PeaksOfWorld(World):
         data_dict = self.options.as_dict("death_link", "goal", "rope_unlock_mode", "death_link_traps",
                                     "game_mode", "disable_solemn_tempest", "include_free_solo", "include_time_attack",
                                     "enable_dlc", "peak_goal", casing="camel")
-        data_dict.update({"settingsVer": 1})
+        data_dict.update({"settingsVer": 2})
         return data_dict
