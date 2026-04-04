@@ -89,7 +89,7 @@ class PeaksOfWorld(World):
             "Fundamentals Book": self.options.enable_fundamental,
             "Intermediate Book": self.options.enable_intermediate,
             "Advanced Book": self.options.enable_advanced,
-            "Expert Book": self.options.enable_expert,
+            "Northern Range Ticket": self.options.enable_expert,
             "Essentials Book": self.options.enable_essentials and self.options.enable_dlc,
             "Alpine Greats Book": self.options.enable_alpine_greats and self.options.enable_dlc,
             "Arduous & Arctic Book": self.options.enable_arduous_arctic and self.options.enable_dlc
