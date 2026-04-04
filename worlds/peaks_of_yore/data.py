@@ -289,12 +289,15 @@ class POYRegion:
     is_peak: bool
     is_book: bool
 
-    def __init__(self, name: str, entry_requirements: Requirements=None, subregions: list[POYRegion]=None,
+    def __init__(self, name: str, entry_requirements: Requirements | dict[str, int]=None, subregions: list[POYRegion]=None,
                  locations: list[LocationData]=None,
                  enable_requirements: Callable[[PeaksOfYoreOptions], bool] = lambda opts: True, is_book: bool = False,
                  is_start: Callable[[PeaksOfYoreOptions], bool] = lambda opts: False):
         if subregions is None:
             subregions = []
+
+        if isinstance(entry_requirements, dict):
+            entry_requirements = SimpleRequirements(entry_requirements)
         if entry_requirements is None:
             entry_requirements = SimpleRequirements({})
         if locations is None:
@@ -336,7 +339,7 @@ class PeakRegion(POYRegion):
     peak_id: int
     generate_time_attack: bool
 
-    def __init__(self, name: str, peak_id: int, entry_requirements: Requirements=None, subregions=None, locations=None,
+    def __init__(self, name: str, peak_id: int, entry_requirements: Requirements | dict[str,int]=None, subregions=None, locations=None,
                  enable_requirements: Callable[[PeaksOfYoreOptions], bool] = lambda opts: True,
                  generate_time_attack: bool = True, generate_free_solo: bool = False):
         self.peak_id = peak_id
@@ -392,7 +395,7 @@ class BookRegion(POYRegion):
     """
     Similar to PeakRegion, BookRegion is a descendant of POYRegion, that will (semi) automatically be set up as a book.
     """
-    def __init__(self, name: str, entry_requirements: Requirements=None, subregions: list[POYRegion]=None,
+    def __init__(self, name: str, entry_requirements: Requirements | dict[str,int]=None, subregions: list[POYRegion]=None,
                  enable_requirements: Callable[[PeaksOfYoreOptions], bool] = lambda opts: True):
         super().__init__(name, entry_requirements, subregions, None, enable_requirements)
         self.is_peak = False
@@ -646,135 +649,222 @@ item_name_to_id: dict[str, int] = {i.name: i.id + i.type for i in all_items}
 item_id_to_classification: dict[int, ItemClassification] = {i.id + i.type: i.classification for i in all_items}
 
 # poy_regions defines all the regions, their entry requirements, locations and requirements to be included
-poy_regions: POYRegion = POYRegion("Cabin", subregions=[
-    BookRegion("Fundamentals", subregions=[
-        PeakRegion("Greenhorn's Top", 0),
-        PeakRegion("Paltry Peak", 1),
-        PeakRegion("Old Mill", 2, locations=[
-            LocationData("Old Mill: Hat", POYItemLocationType.ARTEFACT, 0)
-        ]),
-        PeakRegion("Gray Gully", 3, locations=[
-            LocationData("Gray Gully: Picture Piece #1", POYItemLocationType.ARTEFACT, 14),
-        ]),
-        PeakRegion("Lighthouse", 4),
-        PeakRegion("Old Man Of Sjór", 5, locations=[
-            LocationData("Old Man Of Sjór: Climbing Shoe", POYItemLocationType.ARTEFACT, 3),
-            LocationData("Old Man Of Sjór: Rope: Rope", POYItemLocationType.ROPE, 4)
-        ]),
-        PeakRegion("Giant's Shelf", 6, locations=[
-            LocationData("Giant's Shelf: Sleeping Bag", POYItemLocationType.ARTEFACT, 5),
-        ]),
-        PeakRegion("Evergreen's End", 7, locations=[
-            LocationData("Evergreen's End: Fisherman's Cap", POYItemLocationType.ARTEFACT, 1),
-            LocationData("Evergreen's End: Rope", POYItemLocationType.ROPE, 13),
-        ]),
-        PeakRegion("The Twins", 8),
-        PeakRegion("Old Grove's Skelf", 9, locations=[
-            LocationData("Old Grove's Skelf: Safety Helmet", POYItemLocationType.ARTEFACT, 2)
-        ]),
-        PeakRegion("Land's End", 10, locations=[
-            LocationData("Land's End: Picture Piece #2", POYItemLocationType.ARTEFACT, 15),
-            LocationData("Land's End: Rope", POYItemLocationType.ROPE, 12),
-        ]),
-        PeakRegion("Hangman's Leap", 11, locations=[
-            LocationData("Hangman's Leap: Rope", POYItemLocationType.ROPE, 5),
-            LocationData("Walker Interaction Event", POYItemLocationType.EXTRA, 0, is_event=True),
-        ]),
-        PeakRegion("Old Langr", 12, locations=[
-            LocationData("Old Langr: Coffee Box", POYItemLocationType.ARTEFACT, 7),
-        ]),
-        PeakRegion("Aldr Grotto", 13, entry_requirements=SimpleRequirements({"Oil Lamp": 1}), locations=[
-            LocationData("Aldr Grotto: Backpack", POYItemLocationType.ARTEFACT, 6),
-        ]),
-        PeakRegion("Three Brothers", 14, locations=[
-            LocationData("Three Brothers: Shovel", POYItemLocationType.ARTEFACT, 4),
-            LocationData("Three Brothers: Bird Seed", POYItemLocationType.BIRDSEED, 0),
-        ]),
-        PeakRegion("Walter's Crag", 15, locations=[
-            LocationData("Walter's Crag: Fundamentals Trophy", POYItemLocationType.ARTEFACT, 19),
-            LocationData("Walter's Crag: Rope (Co-Climb)", POYItemLocationType.ROPE, 0),
-            LocationData("Walter's Crag: Rope", POYItemLocationType.ROPE, 11),
-        ]),
-        PeakRegion("The Great Crevice", 16, locations=[
-            LocationData("The Great Crevice: Picture Piece #3", POYItemLocationType.ARTEFACT, 16),
-            LocationData("The Great Crevice: Rope", POYItemLocationType.ROPE, 14),
-        ],entry_requirements=LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Progressive Crampons": 1})),
-        ),
-        PeakRegion("Old Hagger", 17, locations=[
-            LocationData("Old Hagger: Rope", POYItemLocationType.ROPE, 15),
-        ],entry_requirements=LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Progressive Crampons": 1})),
-        ),
-        PeakRegion("Ugsome Storr", 18, locations=[
-            LocationData("Ugsome Storr: Rope", POYItemLocationType.ROPE, 6),
-        ],entry_requirements=LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Progressive Crampons": 1})),
-        ),
-        PeakRegion("Wuthering Crest", 19, locations=[
-            LocationData("Wuthering Crest: Coffee Box", POYItemLocationType.ARTEFACT, 8),
-            LocationData("Wuthering Crest: Rope", POYItemLocationType.ROPE, 9),
-        ],entry_requirements=LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Progressive Crampons": 1})),
-        ),
-    ], enable_requirements=lambda options: options.enable_fundamental),
-    BookRegion("Intermediate", subregions=[
-        PeakRegion("Porter's Boulder", 20),
-        PeakRegion("Jotunn's Thumb", 21),
-        PeakRegion("Old Skerry", 22, locations=[
-            LocationData("Old Skerry: Bird Seed", POYItemLocationType.BIRDSEED, 1),
-        ]),
-        PeakRegion("Hamarr Stone", 23),
-        PeakRegion("Giant's Nose", 24),
-        PeakRegion("Walter's Boulder", 25),
-        PeakRegion("Sundered Sons", 26),
-        PeakRegion("Old Weald's Boulder", 27),
-        PeakRegion("Leaning Spire", 28, locations=[
-            LocationData("Leaning Spire: Intermediate Trophy", POYItemLocationType.ARTEFACT, 11),
-        ]),
-        PeakRegion("Cromlech", 29),
-    ], enable_requirements=lambda options: options.enable_intermediate),
-    BookRegion("Advanced", entry_requirements=LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Progressive Crampons": 1})), subregions=[
-        PeakRegion("Walker's Pillar", 30, locations=[
-            LocationData("Walker's Pillar: Chalk Box", POYItemLocationType.ARTEFACT, 9),
-            LocationData("Walker's Pillar: Rope (Co-Climb)", POYItemLocationType.ROPE, 1,
-                         requirements=SimpleRequirements({"Walker Interaction Event": 1}),
-                         enable_override= lambda options: options.enable_fundamental),
-        ], generate_free_solo=True),
-        PeakRegion("Eldenhorn", 31, locations=[
-            LocationData("Eldenhorn: Chalk Box", POYItemLocationType.ARTEFACT, 10),
-            LocationData("Eldenhorn: Rope", POYItemLocationType.ROPE, 7),
-            LocationData("Eldenhorn: Bird Seed", POYItemLocationType.BIRDSEED, 3),
-        ], generate_free_solo=True),
-        PeakRegion("Great Gaol", 32, locations=[
-            LocationData("Great Gaol: Picture Frame", POYItemLocationType.ARTEFACT, 18,
-                         requirements=ConditionalRequirements(SimpleRequirements({"Progressive Crampons": 2}),
-                                                              lambda opts: opts.requirements_difficulty != RequirementsDifficulty.option_free_solo)),
-            LocationData("Great Gaol: Rope (Encounter)", POYItemLocationType.ROPE, 2),
-            LocationData("Great Gaol: Rope", POYItemLocationType.ROPE, 10),
-            LocationData("Great Gaol: Bird Seed", POYItemLocationType.BIRDSEED, 2),
-        ], generate_free_solo=True),
-        PeakRegion("St. Haelga", 33, locations=[
-            LocationData("St. Haelga: Rope (Encounter)", POYItemLocationType.ROPE, 3),
-            LocationData("St. Haelga: Picture Piece #4", POYItemLocationType.ARTEFACT, 17),
-        ], generate_free_solo=True),
-        PeakRegion("Ymir's Shadow", 34, locations=[
-            LocationData("Ymir's Shadow: Advanced Trophy", POYItemLocationType.ARTEFACT, 12,
-                         requirements=ConditionalRequirements(SimpleRequirements({"Progressive Crampons": 2}),
-                                      lambda opts: opts.requirements_difficulty != RequirementsDifficulty.option_free_solo)
-                         ),
-            LocationData("Ymir's Shadow: Rope", POYItemLocationType.ROPE, 8),
-            LocationData("Ymir's Shadow: Bird Seed", POYItemLocationType.BIRDSEED, 4),
-        ], generate_free_solo=True),
-    ], enable_requirements=lambda options: options.enable_advanced),
-    BookRegion("Expert", entry_requirements=(
-            SimpleRequirements({"Ice Axes": 1}) &
-            ConditionalRequirements(SimpleRequirements({"Progressive Crampons": 1}), lambda opts: opts.requirements_difficulty != RequirementsDifficulty.option_free_solo) &
-            LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Pipe": 1}))
-    ), subregions=[
-        PeakRegion("The Great Bulwark", 35, locations=[
-            LocationData("The Great Bulwark: Expert Trophy", POYItemLocationType.ARTEFACT, 13),
-        ], generate_time_attack=False, generate_free_solo=True),
-        PeakRegion("Solemn Tempest", 36, entry_requirements=ConditionalRequirements(SimpleRequirements({"Progressive Crampons": 2}), lambda opts: opts.requirements_difficulty != RequirementsDifficulty.option_free_solo),
-                   enable_requirements=lambda options: not options.disable_solemn_tempest, generate_time_attack=False,
-                   generate_free_solo=True),
-    ], enable_requirements=lambda options: options.enable_expert),
+poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
+    POYRegion("Base Game", subregions=[
+        BookRegion("Fundamentals", subregions=[
+            PeakRegion("Greenhorn's Top", 0),
+            PeakRegion("Paltry Peak", 1),
+            PeakRegion("Old Mill", 2, locations=[
+                LocationData("Old Mill: Hat", POYItemLocationType.ARTEFACT, 0)
+            ]),
+            PeakRegion("Gray Gully", 3, locations=[
+                LocationData("Gray Gully: Picture Piece #1", POYItemLocationType.ARTEFACT, 14),
+            ]),
+            PeakRegion("Lighthouse", 4),
+            PeakRegion("Old Man Of Sjór", 5, locations=[
+                LocationData("Old Man Of Sjór: Climbing Shoe", POYItemLocationType.ARTEFACT, 3),
+                LocationData("Old Man Of Sjór: Rope: Rope", POYItemLocationType.ROPE, 4)
+            ]),
+            PeakRegion("Giant's Shelf", 6, locations=[
+                LocationData("Giant's Shelf: Sleeping Bag", POYItemLocationType.ARTEFACT, 5),
+            ]),
+            PeakRegion("Evergreen's End", 7, locations=[
+                LocationData("Evergreen's End: Fisherman's Cap", POYItemLocationType.ARTEFACT, 1),
+                LocationData("Evergreen's End: Rope", POYItemLocationType.ROPE, 13),
+            ]),
+            PeakRegion("The Twins", 8),
+            PeakRegion("Old Grove's Skelf", 9, locations=[
+                LocationData("Old Grove's Skelf: Safety Helmet", POYItemLocationType.ARTEFACT, 2)
+            ]),
+            PeakRegion("Land's End", 10, locations=[
+                LocationData("Land's End: Picture Piece #2", POYItemLocationType.ARTEFACT, 15),
+                LocationData("Land's End: Rope", POYItemLocationType.ROPE, 12),
+            ]),
+            PeakRegion("Hangman's Leap", 11, locations=[
+                LocationData("Hangman's Leap: Rope", POYItemLocationType.ROPE, 5),
+                LocationData("Walker Interaction Event", POYItemLocationType.EXTRA, 0, is_event=True),
+            ]),
+            PeakRegion("Old Langr", 12, locations=[
+                LocationData("Old Langr: Coffee Box", POYItemLocationType.ARTEFACT, 7),
+            ]),
+            PeakRegion("Aldr Grotto", 13, entry_requirements=SimpleRequirements({"Oil Lamp": 1}), locations=[
+                LocationData("Aldr Grotto: Backpack", POYItemLocationType.ARTEFACT, 6),
+            ]),
+            PeakRegion("Three Brothers", 14, locations=[
+                LocationData("Three Brothers: Shovel", POYItemLocationType.ARTEFACT, 4),
+                LocationData("Three Brothers: Bird Seed", POYItemLocationType.BIRDSEED, 0),
+            ]),
+            PeakRegion("Walter's Crag", 15, locations=[
+                LocationData("Walter's Crag: Fundamentals Trophy", POYItemLocationType.ARTEFACT, 19),
+                LocationData("Walter's Crag: Rope (Co-Climb)", POYItemLocationType.ROPE, 0),
+                LocationData("Walter's Crag: Rope", POYItemLocationType.ROPE, 11),
+            ]),
+            PeakRegion("The Great Crevice", 16, locations=[
+                LocationData("The Great Crevice: Picture Piece #3", POYItemLocationType.ARTEFACT, 16),
+                LocationData("The Great Crevice: Rope", POYItemLocationType.ROPE, 14),
+            ],entry_requirements=LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Progressive Crampons": 1})),
+            ),
+            PeakRegion("Old Hagger", 17, locations=[
+                LocationData("Old Hagger: Rope", POYItemLocationType.ROPE, 15),
+            ],entry_requirements=LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Progressive Crampons": 1})),
+            ),
+            PeakRegion("Ugsome Storr", 18, locations=[
+                LocationData("Ugsome Storr: Rope", POYItemLocationType.ROPE, 6),
+            ],entry_requirements=LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Progressive Crampons": 1})),
+            ),
+            PeakRegion("Wuthering Crest", 19, locations=[
+                LocationData("Wuthering Crest: Coffee Box", POYItemLocationType.ARTEFACT, 8),
+                LocationData("Wuthering Crest: Rope", POYItemLocationType.ROPE, 9),
+            ],entry_requirements=LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Progressive Crampons": 1})),
+            ),
+        ], enable_requirements=lambda options: options.enable_fundamental),
+        BookRegion("Intermediate", subregions=[
+            PeakRegion("Porter's Boulder", 20),
+            PeakRegion("Jotunn's Thumb", 21),
+            PeakRegion("Old Skerry", 22, locations=[
+                LocationData("Old Skerry: Bird Seed", POYItemLocationType.BIRDSEED, 1),
+            ]),
+            PeakRegion("Hamarr Stone", 23),
+            PeakRegion("Giant's Nose", 24),
+            PeakRegion("Walter's Boulder", 25),
+            PeakRegion("Sundered Sons", 26),
+            PeakRegion("Old Weald's Boulder", 27),
+            PeakRegion("Leaning Spire", 28, locations=[
+                LocationData("Leaning Spire: Intermediate Trophy", POYItemLocationType.ARTEFACT, 11),
+            ]),
+            PeakRegion("Cromlech", 29),
+        ], enable_requirements=lambda options: options.enable_intermediate),
+        BookRegion("Advanced", entry_requirements=LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Progressive Crampons": 1})), subregions=[
+            PeakRegion("Walker's Pillar", 30, locations=[
+                LocationData("Walker's Pillar: Chalk Box", POYItemLocationType.ARTEFACT, 9),
+                LocationData("Walker's Pillar: Rope (Co-Climb)", POYItemLocationType.ROPE, 1,
+                             requirements=SimpleRequirements({"Walker Interaction Event": 1}),
+                             enable_override= lambda options: options.enable_fundamental),
+            ], generate_free_solo=True),
+            PeakRegion("Eldenhorn", 31, locations=[
+                LocationData("Eldenhorn: Chalk Box", POYItemLocationType.ARTEFACT, 10),
+                LocationData("Eldenhorn: Rope", POYItemLocationType.ROPE, 7),
+                LocationData("Eldenhorn: Bird Seed", POYItemLocationType.BIRDSEED, 3),
+            ], generate_free_solo=True),
+            PeakRegion("Great Gaol", 32, locations=[
+                LocationData("Great Gaol: Picture Frame", POYItemLocationType.ARTEFACT, 18,
+                             requirements=ConditionalRequirements(SimpleRequirements({"Progressive Crampons": 2}),
+                                                                  lambda opts: opts.requirements_difficulty != RequirementsDifficulty.option_free_solo)),
+                LocationData("Great Gaol: Rope (Encounter)", POYItemLocationType.ROPE, 2),
+                LocationData("Great Gaol: Rope", POYItemLocationType.ROPE, 10),
+                LocationData("Great Gaol: Bird Seed", POYItemLocationType.BIRDSEED, 2),
+            ], generate_free_solo=True),
+            PeakRegion("St. Haelga", 33, locations=[
+                LocationData("St. Haelga: Rope (Encounter)", POYItemLocationType.ROPE, 3),
+                LocationData("St. Haelga: Picture Piece #4", POYItemLocationType.ARTEFACT, 17),
+            ], generate_free_solo=True),
+            PeakRegion("Ymir's Shadow", 34, locations=[
+                LocationData("Ymir's Shadow: Advanced Trophy", POYItemLocationType.ARTEFACT, 12,
+                             requirements=ConditionalRequirements(SimpleRequirements({"Progressive Crampons": 2}),
+                                          lambda opts: opts.requirements_difficulty != RequirementsDifficulty.option_free_solo)
+                             ),
+                LocationData("Ymir's Shadow: Rope", POYItemLocationType.ROPE, 8),
+                LocationData("Ymir's Shadow: Bird Seed", POYItemLocationType.BIRDSEED, 4),
+            ], generate_free_solo=True),
+        ], enable_requirements=lambda options: options.enable_advanced),
+        BookRegion("Expert", entry_requirements=(
+                SimpleRequirements({"Ice Axes": 1}) &
+                ConditionalRequirements(SimpleRequirements({"Progressive Crampons": 1}), lambda opts: opts.requirements_difficulty != RequirementsDifficulty.option_free_solo) &
+                LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Pipe": 1}))
+        ), subregions=[
+            PeakRegion("The Great Bulwark", 35, locations=[
+                LocationData("The Great Bulwark: Expert Trophy", POYItemLocationType.ARTEFACT, 13),
+            ], generate_time_attack=False, generate_free_solo=True),
+            PeakRegion("Solemn Tempest", 36, entry_requirements=ConditionalRequirements(SimpleRequirements({"Progressive Crampons": 2}), lambda opts: opts.requirements_difficulty != RequirementsDifficulty.option_free_solo),
+                       enable_requirements=lambda options: not options.disable_solemn_tempest, generate_time_attack=False,
+                       generate_free_solo=True),
+        ], enable_requirements=lambda options: options.enable_expert),
+    ]),
+    POYRegion("DLC", entry_requirements={"Alps Ticket": 1}, subregions=[
+        BookRegion("Essentials", subregions=[
+            PeakRegion("Tutor's Tower", 37),
+            PeakRegion("Stougr Boulder", 38),
+            PeakRegion("Mara's Arch", 39, locations=[
+                LocationData("Mara's Arch: Gentiana #1", POYItemLocationType.ARTEFACT, 40),
+            ]),
+            PeakRegion("Grainne Spire", 40, locations=[
+                LocationData("Grainne Spire: Crimps Idol #1", POYItemLocationType.ARTEFACT, 20),
+            ]),
+            PeakRegion("Great Bók Tree", 41, locations=[
+                LocationData("Great Bók Tree: Edelweiss #2", POYItemLocationType.ARTEFACT, 48),
+                LocationData("Great Bók Tree: Crimps Idol #2", POYItemLocationType.ARTEFACT, 21),
+            ]),
+            PeakRegion("Treppenwald", 42, locations=[
+                LocationData("Treppenwald: Gentiana #2", POYItemLocationType.ARTEFACT, 41),
+                LocationData("Treppenwald: Seeds Idol #1", POYItemLocationType.ARTEFACT, 36),
+            ]),
+            PeakRegion("Castle of the Swan King", 43, locations=[
+                LocationData("Castle of the Swan King: Edelweiss #3", POYItemLocationType.ARTEFACT, 49),
+                LocationData("Castle of the Swan King: Slopers Idol #1", POYItemLocationType.ARTEFACT, 22),
+                LocationData("Castle of the Swan King: Sundown Idol #1", POYItemLocationType.ARTEFACT, 34),
+                LocationData("Castle of the Swan King: Pitches Idol #1", POYItemLocationType.ARTEFACT, 26),
+            ]),
+            PeakRegion("Seaside Tribune", 44, locations=[
+                LocationData("Seaside Tribune: Pinches Idol #2", POYItemLocationType.ARTEFACT, 31),
+            ]),
+            PeakRegion("Ivory Granites", 45, locations=[
+                LocationData("Ivory Granites: Edelweiss #4", POYItemLocationType.ARTEFACT, 50),
+                LocationData("Ivory Granites: Gravity Idol #2", POYItemLocationType.ARTEFACT, 39),
+            ]),
+            PeakRegion("Old Rekkja", 46, locations=[
+                LocationData("Old Rekkja: Slopers Idol #2", POYItemLocationType.ARTEFACT, 23),
+            ]),
+            PeakRegion("Quietude", 47, locations=[
+                LocationData("Quietude: Gentiana #4", POYItemLocationType.ARTEFACT, 43),
+            ]),
+            PeakRegion("Eljun's Folly", 48, locations=[
+                LocationData("Eljun's Folly: Gentiana #3", POYItemLocationType.ARTEFACT, 42),
+                LocationData("Eljun's Folly: Pitches Idol #2", POYItemLocationType.ARTEFACT, 27),
+            ]),
+        ], enable_requirements=lambda options: options.enable_essentials),
+        BookRegion("Alpine Greats", subregions=[
+            PeakRegion("Einvald Falls", 49, locations=[
+                LocationData("Eivald Falls: Gentiana #5", POYItemLocationType.ARTEFACT, 44),
+            ]),
+            PeakRegion("Almáttr Dam", 50),
+            PeakRegion("Dunderhorn", 51, locations=[
+                LocationData("Dunderhorn: Edelweiss #7", POYItemLocationType.ARTEFACT, 53),
+                LocationData("Dunderhorn: Sundown Idol #2", POYItemLocationType.ARTEFACT, 35),
+            ]),
+            PeakRegion("Mhòr Druim", 52, locations=[
+                LocationData("Mhòr Druim: Ice Idol #1", POYItemLocationType.ARTEFACT, 28),
+                LocationData("Mhòr Druim: Feathers Idol #1", POYItemLocationType.ARTEFACT, 24),
+                LocationData("Mhòr Druim: Gentiana #6", POYItemLocationType.ARTEFACT, 45),
+            ]),
+            PeakRegion("Welkin Pass", 53, locations=[
+                LocationData("Welkin Pass: Edeweiss #6", POYItemLocationType.ARTEFACT, 52),
+                LocationData("Welkin Pass: Feathers Idol #2", POYItemLocationType.ARTEFACT, 25),
+            ])
+        ], enable_requirements=lambda options: options.enable_alpine_greats),
+        BookRegion("Arduous & Arctic", entry_requirements={"Ice Axes": 1}, subregions=[
+            PeakRegion("Seigr Craeg", 54,
+                       generate_free_solo=True),
+            PeakRegion("Ullr's Chasm", 55, locations=[
+                LocationData("Ullr's Chasm: Greater Balance Idol #2", POYItemLocationType.ARTEFACT, 33),
+            ], generate_free_solo=True),
+            PeakRegion("Great Silf", 56, generate_free_solo=True),
+            PeakRegion("Towering Visír", 57, locations=[
+                LocationData("Towering Visír: Greater Balance Idol #1", POYItemLocationType.ARTEFACT, 32),
+                LocationData("Towering Visír: Gentiana #7", POYItemLocationType.ARTEFACT, 46),
+                LocationData("Towering Visír: Edelweiss #1", POYItemLocationType.ARTEFACT, 47),
+                LocationData("Towering Visír: Pinches Idol #1", POYItemLocationType.ARTEFACT, 30),
+
+            ], generate_free_solo=True),
+            PeakRegion("Eldris Wall", 58, locations=[
+                LocationData("Eldris Wall: Ice Idol #2", POYItemLocationType.ARTEFACT, 29),
+                LocationData("Eldris Wall: Edelweiss #5", POYItemLocationType.ARTEFACT, 51),
+                LocationData("Eldris Wall: Seeds Idol #2", POYItemLocationType.ARTEFACT, 37),
+            ], generate_free_solo=True),
+            PeakRegion("Mount Mhòrgorm", 59, locations=[
+                LocationData("Mount Mhòrgorm: Gravity Idol #1", POYItemLocationType.ARTEFACT, 38),
+            ], generate_free_solo=True),
+        ], enable_requirements=lambda options: options.enable_arduous_arctic),
+    ], enable_requirements=lambda options: options.enable_dlc,),
 ])
 all_locations_to_ids: dict[str, int] = poy_regions.get_all_locations_dict()
 ids_to_locations: dict[int, str] = {v: k for k, v in all_locations_to_ids.items()}
