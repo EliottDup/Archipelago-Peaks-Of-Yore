@@ -562,16 +562,16 @@ all_items: list[ItemData] = [
     ItemData("Alps Ticket", 14, ItemClassification.progression, POYItemLocationType.TOOL, min_count=0),
 
     # DLC Idols
-    ItemData("Crimps Idol", 0, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
-    ItemData("Slopers Idol", 1, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
-    ItemData("Feathers Idol", 2, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
-    ItemData("Pitches Idol", 3, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
-    ItemData("Ice Idol", 4, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
-    ItemData("Pinches Idol", 5, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
-    ItemData("Greater Balance Idol", 6, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
-    ItemData("Sundown Idol", 7, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
-    ItemData("Seeds Idol", 8, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
-    ItemData("Gravity Idol", 9, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
+    ItemData("Idol of Crimps", 0, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
+    ItemData("Idol of Slopers", 1, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
+    ItemData("Idol of Feathers", 2, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
+    ItemData("Idol of Pitches", 3, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
+    ItemData("Idol of Ice", 4, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
+    ItemData("Idol of Pinches", 5, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
+    ItemData("Idol of Greater Balance", 6, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
+    ItemData("Idol of Sundown", 7, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
+    ItemData("Idol of Seeds", 8, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
+    ItemData("Idol of Cruelty", 9, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
 
     # DLC Books
     ItemData("Essentials Book", 4, ItemClassification.progression, POYItemLocationType.BOOK,
@@ -752,38 +752,38 @@ poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
                 LocationData("Mara's Arch: Gentiana #1", POYItemLocationType.ARTEFACT, 40),
             ]),
             PeakRegion("Grainne Spire", 40, locations=[
-                LocationData("Grainne Spire: Crimps Idol #1", POYItemLocationType.ARTEFACT, 20),
+                LocationData("Grainne Spire: Idol of Crimps #1", POYItemLocationType.ARTEFACT, 20),
             ]),
             PeakRegion("Great Bók Tree", 41, locations=[
                 LocationData("Great Bók Tree: Edelweiss #2", POYItemLocationType.ARTEFACT, 48),
-                LocationData("Great Bók Tree: Crimps Idol #2", POYItemLocationType.ARTEFACT, 21),
+                LocationData("Great Bók Tree: Idol of Crimps #2", POYItemLocationType.ARTEFACT, 21),
             ]),
             PeakRegion("Treppenwald", 42, locations=[
                 LocationData("Treppenwald: Gentiana #2", POYItemLocationType.ARTEFACT, 41),
-                LocationData("Treppenwald: Seeds Idol #1", POYItemLocationType.ARTEFACT, 36),
+                LocationData("Treppenwald: Idol of Seeds #1", POYItemLocationType.ARTEFACT, 36),
             ]),
             PeakRegion("Castle of the Swan King", 43, locations=[
                 LocationData("Castle of the Swan King: Edelweiss #3", POYItemLocationType.ARTEFACT, 49),
-                LocationData("Castle of the Swan King: Slopers Idol #1", POYItemLocationType.ARTEFACT, 22),
-                LocationData("Castle of the Swan King: Sundown Idol #1", POYItemLocationType.ARTEFACT, 34),
-                LocationData("Castle of the Swan King: Pitches Idol #1", POYItemLocationType.ARTEFACT, 26),
+                LocationData("Castle of the Swan King: Idol of Slopers #1", POYItemLocationType.ARTEFACT, 22),
+                LocationData("Castle of the Swan King: Idol of Sundown #1", POYItemLocationType.ARTEFACT, 34),
+                LocationData("Castle of the Swan King: Idol of Pitches #1", POYItemLocationType.ARTEFACT, 26),
             ]),
             PeakRegion("Seaside Tribune", 44, locations=[
-                LocationData("Seaside Tribune: Pinches Idol #2", POYItemLocationType.ARTEFACT, 31),
+                LocationData("Seaside Tribune: Idol of Pinches #2", POYItemLocationType.ARTEFACT, 31),
             ]),
             PeakRegion("Ivory Granites", 45, locations=[
                 LocationData("Ivory Granites: Edelweiss #4", POYItemLocationType.ARTEFACT, 50),
-                LocationData("Ivory Granites: Gravity Idol #2", POYItemLocationType.ARTEFACT, 39),
+                LocationData("Ivory Granites: Idol of Cruelty #2", POYItemLocationType.ARTEFACT, 39),
             ]),
             PeakRegion("Old Rekkja", 46, locations=[
-                LocationData("Old Rekkja: Slopers Idol #2", POYItemLocationType.ARTEFACT, 23),
+                LocationData("Old Rekkja: Idol of Slopers #2", POYItemLocationType.ARTEFACT, 23),
             ]),
             PeakRegion("Quietude", 47, locations=[
                 LocationData("Quietude: Gentiana #4", POYItemLocationType.ARTEFACT, 43),
             ]),
             PeakRegion("Eljun's Folly", 48, locations=[
                 LocationData("Eljun's Folly: Gentiana #3", POYItemLocationType.ARTEFACT, 42),
-                LocationData("Eljun's Folly: Pitches Idol #2", POYItemLocationType.ARTEFACT, 27),
+                LocationData("Eljun's Folly: Idol of Pitches #2", POYItemLocationType.ARTEFACT, 27),
             ]),
         ], enable_requirements=lambda options: options.enable_essentials),
         BookRegion("Alpine Greats", subregions=[
@@ -793,39 +793,39 @@ poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
             PeakRegion("Almáttr Dam", 50),
             PeakRegion("Dunderhorn", 51, locations=[
                 LocationData("Dunderhorn: Edelweiss #7", POYItemLocationType.ARTEFACT, 53),
-                LocationData("Dunderhorn: Sundown Idol #2", POYItemLocationType.ARTEFACT, 35),
+                LocationData("Dunderhorn: Idol of Sundown #2", POYItemLocationType.ARTEFACT, 35),
             ]),
             PeakRegion("Mhòr Druim", 52, locations=[
-                LocationData("Mhòr Druim: Ice Idol #1", POYItemLocationType.ARTEFACT, 28),
-                LocationData("Mhòr Druim: Feathers Idol #1", POYItemLocationType.ARTEFACT, 24),
+                LocationData("Mhòr Druim: Idol of Ice #1", POYItemLocationType.ARTEFACT, 28),
+                LocationData("Mhòr Druim: Idol of Feathers #1", POYItemLocationType.ARTEFACT, 24),
                 LocationData("Mhòr Druim: Gentiana #6", POYItemLocationType.ARTEFACT, 45),
             ]),
             PeakRegion("Welkin Pass", 53, locations=[
                 LocationData("Welkin Pass: Edeweiss #6", POYItemLocationType.ARTEFACT, 52),
-                LocationData("Welkin Pass: Feathers Idol #2", POYItemLocationType.ARTEFACT, 25),
+                LocationData("Welkin Pass: Idol of Feathers #2", POYItemLocationType.ARTEFACT, 25),
             ])
         ], enable_requirements=lambda options: options.enable_alpine_greats),
         BookRegion("Arduous & Arctic", entry_requirements={"Ice Axes": 1}, subregions=[
             PeakRegion("Seigr Craeg", 54,
                        generate_free_solo=True),
             PeakRegion("Ullr's Chasm", 55, locations=[
-                LocationData("Ullr's Chasm: Greater Balance Idol #2", POYItemLocationType.ARTEFACT, 33),
+                LocationData("Ullr's Chasm: Idol of Greater Balance #2", POYItemLocationType.ARTEFACT, 33),
             ], generate_free_solo=True),
             PeakRegion("Great Silf", 56, generate_free_solo=True),
             PeakRegion("Towering Visír", 57, locations=[
-                LocationData("Towering Visír: Greater Balance Idol #1", POYItemLocationType.ARTEFACT, 32),
+                LocationData("Towering Visír: Idol of Greater Balance #1", POYItemLocationType.ARTEFACT, 32),
                 LocationData("Towering Visír: Gentiana #7", POYItemLocationType.ARTEFACT, 46),
                 LocationData("Towering Visír: Edelweiss #1", POYItemLocationType.ARTEFACT, 47),
-                LocationData("Towering Visír: Pinches Idol #1", POYItemLocationType.ARTEFACT, 30),
+                LocationData("Towering Visír: Idol of Pinches #1", POYItemLocationType.ARTEFACT, 30),
 
             ], generate_free_solo=True),
             PeakRegion("Eldris Wall", 58, locations=[
-                LocationData("Eldris Wall: Ice Idol #2", POYItemLocationType.ARTEFACT, 29),
+                LocationData("Eldris Wall: Idol of Ice #2", POYItemLocationType.ARTEFACT, 29),
                 LocationData("Eldris Wall: Edelweiss #5", POYItemLocationType.ARTEFACT, 51),
-                LocationData("Eldris Wall: Seeds Idol #2", POYItemLocationType.ARTEFACT, 37),
+                LocationData("Eldris Wall: Idol of Seeds #2", POYItemLocationType.ARTEFACT, 37),
             ], generate_free_solo=True),
             PeakRegion("Mount Mhòrgorm", 59, locations=[
-                LocationData("Mount Mhòrgorm: Gravity Idol #1", POYItemLocationType.ARTEFACT, 38),
+                LocationData("Mount Mhòrgorm: Idol of Cruelty #1", POYItemLocationType.ARTEFACT, 38),
             ], generate_free_solo=True),
         ], enable_requirements=lambda options: options.enable_arduous_arctic),
     ], enable_requirements=lambda options: options.enable_dlc,),

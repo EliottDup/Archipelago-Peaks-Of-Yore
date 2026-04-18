@@ -131,7 +131,7 @@ class PeaksOfWorld(World):
             starting_peak_book = book_names[self.options.starting_peak.get_peak_book_option()]
             if not starting_book_options[starting_peak_book]:
                 self.options.starting_peak.value = self.options.starting_book.get_start_peak_id()
-                logging.warning(f"setting start peak to {self.options.starting_book.get_start_peak_id()}")
+                logging.warning(f"setting start peak to {self.options.starting_book.get_start_peak_id()} as selected peak was not in an enabled book")
 
             if self.options.starting_peak.value == StartingPeak.option_solemn_tempest and self.options.disable_solemn_tempest:
                 raise OptionError("solemn tempest is selected as starting peak but solemn tempest is not enabled")
@@ -258,5 +258,5 @@ class PeaksOfWorld(World):
         data_dict = self.options.as_dict("death_link", "goal", "rope_unlock_mode", "death_link_traps",
                                     "game_mode", "disable_solemn_tempest", "include_free_solo", "include_time_attack",
                                     "enable_dlc", "peak_goal", casing="camel")
-        data_dict.update({"settingsVer": 2})
+        data_dict.update({"settingsVer": 3})
         return data_dict

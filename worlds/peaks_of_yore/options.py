@@ -40,6 +40,29 @@ class PeakChoice(Choice):
     option_ymirs_shadow = 34
     option_great_bulwark = 35
     option_solemn_tempest = 36
+    option_tutors_tower = 37
+    option_stougr_boulder = 38
+    option_maras_arch = 39
+    option_grainne_spire = 40
+    option_great_bok_tree = 41
+    option_treppenwald = 42
+    option_castle_of_the_swan_king = 43
+    option_seaside_tribunes = 44
+    option_ivory_granites = 45
+    option_old_rekkja = 46
+    option_quietude = 47
+    option_eljuns_folly = 48
+    option_einvald_falls = 49
+    option_almattr_dam = 50
+    option_dunderhorn = 51
+    option_mhor_druim = 52
+    option_welkin_pass = 53
+    option_seigr_craeg = 54
+    option_ullrs_chasm = 55
+    option_great_silf = 56
+    option_towering_visir = 57
+    option_eldris_wall = 58
+    option_mount_mhorhorm = 59
     default = 0
 
     def get_location_id(self) -> int:
@@ -52,13 +75,22 @@ class PeakChoice(Choice):
             return StartingBook.option_intermediate
         elif self.value <= 34:
             return StartingBook.option_advanced
-        else:
+        elif self.value <= 36:
             return StartingBook.option_expert
+        elif self.value <= 48:
+            return StartingBook.option_essentials
+        elif self.value <= 53:
+            return StartingBook.option_alpine_greats
+        else:
+            return StartingBook.option_arduous_arctic
 
     # incomplete, but simple
     @classmethod
     def get_option_name(cls, value: T) -> str:
-        return super().get_option_name(value).replace("s ", "'s ")
+        name: str = super().get_option_name(value).replace("s ", "'s ")
+        if value > 36:
+            name = "- DLC - " + name
+        return name
 
 class Goal(Choice):
     """
