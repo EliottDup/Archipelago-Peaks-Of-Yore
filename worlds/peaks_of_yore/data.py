@@ -20,8 +20,8 @@ free_solo_peak_offset: int = 7000
 time_attack_time_offset: int = 8000
 time_attack_ropes_offset: int = 9000
 time_attack_holds_offset: int = 10000
-alps_idols_offset: int = 12000
-mermaids_offset: int = 13000
+alps_idols_offset: int = 11000
+mermaids_offset: int = 12000
 
 # To whoever is reviewing this, just know that I pray for you
 # I basically rewrote this entire file from scratch, so don't go looking at the differences
@@ -272,8 +272,8 @@ class LeveledRequirements(ConditionalRequirements):
         super().__init__(requirements,  lambda opts: opts.requirements_difficulty == difficulty, start_priority)
 
 class LeveledRequirementsV2(Requirements):
-    requirements: dict[list[RequirementsDifficulty | int], Requirements]
-    def __init__(self, requirements: dict[list[RequirementsDifficulty|int], Requirements], start_priority: int = 0):
+    requirements: dict[tuple[RequirementsDifficulty | int, ...], Requirements]
+    def __init__(self, requirements: dict[tuple[RequirementsDifficulty|int, ...], Requirements], start_priority: int = 0):
         super().__init__(start_priority)
         self.requirements = requirements
 
@@ -750,7 +750,7 @@ poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
             ], generate_free_solo=True),
             PeakRegion("Great Gaol", 32, locations=[
                 LocationData("Great Gaol: Picture Frame", POYItemLocationType.ARTEFACT, 18,
-                             requirements=LeveledRequirementsV2({[0,1,2]: SimpleRequirements({"Progressive Crampons": 2})}),
+                             requirements=LeveledRequirementsV2({(0,1,2): SimpleRequirements({"Progressive Crampons": 2})}),
                              ),
                 LocationData("Great Gaol: Rope (Encounter)", POYItemLocationType.ROPE, 2),
                 LocationData("Great Gaol: Rope", POYItemLocationType.ROPE, 10),
@@ -762,14 +762,14 @@ poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
             ], generate_free_solo=True),
             PeakRegion("Ymir's Shadow", 34, locations=[
                 LocationData("Ymir's Shadow: Advanced Trophy", POYItemLocationType.ARTEFACT, 12,
-                             requirements=LeveledRequirementsV2({[0,1,2]: SimpleRequirements({"Progressive Crampons": 2})})),
+                             requirements=LeveledRequirementsV2({(0,1,2): SimpleRequirements({"Progressive Crampons": 2})})),
                 LocationData("Ymir's Shadow: Rope", POYItemLocationType.ROPE, 8),
                 LocationData("Ymir's Shadow: Bird Seed", POYItemLocationType.BIRDSEED, 4),
             ], generate_free_solo=True),
         ], enable_requirements=lambda options: options.enable_advanced),
         BookRegion("Expert", "Northern Range Ticket", entry_requirements=(
                 SimpleRequirements({"Ice Axes": 1}) &
-                LeveledRequirementsV2({[0,1,2]: SimpleRequirements({"Progressive Crampons": 2}), [0]: SimpleRequirements({"Pipe": 1})})
+                LeveledRequirementsV2({(0,1,2): SimpleRequirements({"Progressive Crampons": 2}), (0,): SimpleRequirements({"Pipe": 1})})
         ), subregions=[
             PeakRegion("The Great Bulwark", 35, locations=[
                 LocationData("The Great Bulwark: Expert Trophy", POYItemLocationType.ARTEFACT, 13),
@@ -779,7 +779,7 @@ poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
                        generate_free_solo=True),
         ], enable_requirements=lambda options: options.enable_expert),
     ]),
-    POYRegion("DLC", entry_requirements=SimpleRequirements({"Alps Ticket": 1}) & LeveledRequirementsV2({[0, 1, 2]: SimpleRequirements({"Progressive Crampons": 1})}), subregions=[
+    POYRegion("DLC", entry_requirements=SimpleRequirements({"Alps Ticket": 1}) & LeveledRequirementsV2({(0, 1, 2): SimpleRequirements({"Progressive Crampons": 1})}), subregions=[
         BookRegion("Essentials", subregions=[
             PeakRegion("Tutor's Tower", 37, locations=[
                 MermaidLocation("Great Eagle #1", 12),
