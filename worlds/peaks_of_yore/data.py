@@ -258,6 +258,25 @@ class LeveledRequirements(ConditionalRequirements):
     def __init__(self, difficulty: RequirementsDifficulty, requirements: Requirements, start_priority: int = 0):
         super().__init__(requirements,  lambda opts: opts.requirements_difficulty == difficulty, start_priority)
 
+class LeveledRequirementsV2(Requirements):
+    requirements: dict[list[RequirementsDifficulty | int], Requirements]
+    def __init__(self, requirements: dict[list[RequirementsDifficulty|int], Requirements], start_priority: int = 0):
+        super().__init__(start_priority)
+        self.requirements = requirements
+
+    def can_reach(self, opts: PeaksOfYoreOptions, state: CollectionState, world: World) -> bool:
+        return all(v.can_reach(opts, state, world) for k, v in self.requirements.items() if opts.requirements_difficulty.value in k)
+
+    def evaluate_items(self, opts: PeaksOfYoreOptions) -> dict[str, int]:
+        final: dict[str, int] = {}
+        for k, v in self.requirements.items():
+            if opts.requirements_difficulty.value in k:
+                final.update(v.evaluate_items(opts))
+        return final
+
+    def is_empty(self) -> bool:
+        return self.requirements == {}
+
 def get_rope_requirement(rope_count: int, start_priority = 0) -> Requirements:
     """
     this assumes that the change to make extra ropes worth 2 has been made!!
@@ -612,7 +631,6 @@ item_name_to_id: dict[str, int] = {i.name: i.id + i.type for i in all_items}
 
 item_id_to_classification: dict[int, ItemClassification] = {i.id + i.type: i.classification for i in all_items}
 
-# poy_regions defines all the regions, their entry requirements, locations and requirements to be included
 poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
     POYRegion("Base Game", subregions=[
         BookRegion("Fundamentals", subregions=[
@@ -712,8 +730,8 @@ poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
             ], generate_free_solo=True),
             PeakRegion("Great Gaol", 32, locations=[
                 LocationData("Great Gaol: Picture Frame", POYItemLocationType.ARTEFACT, 18,
-                             requirements=ConditionalRequirements(SimpleRequirements({"Progressive Crampons": 2}),
-                                                                  lambda opts: opts.requirements_difficulty != RequirementsDifficulty.option_free_solo)),
+                             requirements=LeveledRequirementsV2({[0,1,2]: SimpleRequirements({"Progressive Crampons": 2})}),
+                             ),
                 LocationData("Great Gaol: Rope (Encounter)", POYItemLocationType.ROPE, 2),
                 LocationData("Great Gaol: Rope", POYItemLocationType.ROPE, 10),
                 LocationData("Great Gaol: Bird Seed", POYItemLocationType.BIRDSEED, 2),
@@ -724,17 +742,14 @@ poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
             ], generate_free_solo=True),
             PeakRegion("Ymir's Shadow", 34, locations=[
                 LocationData("Ymir's Shadow: Advanced Trophy", POYItemLocationType.ARTEFACT, 12,
-                             requirements=ConditionalRequirements(SimpleRequirements({"Progressive Crampons": 2}),
-                                          lambda opts: opts.requirements_difficulty != RequirementsDifficulty.option_free_solo)
-                             ),
+                             requirements=LeveledRequirementsV2({[0,1,2]: SimpleRequirements({"Progressive Crampons": 2})})),
                 LocationData("Ymir's Shadow: Rope", POYItemLocationType.ROPE, 8),
                 LocationData("Ymir's Shadow: Bird Seed", POYItemLocationType.BIRDSEED, 4),
             ], generate_free_solo=True),
         ], enable_requirements=lambda options: options.enable_advanced),
         BookRegion("Expert", "Northern Range Ticket", entry_requirements=(
                 SimpleRequirements({"Ice Axes": 1}) &
-                ConditionalRequirements(SimpleRequirements({"Progressive Crampons": 1}), lambda opts: opts.requirements_difficulty != RequirementsDifficulty.option_free_solo) &
-                LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Pipe": 1}))
+                LeveledRequirementsV2({[0,1,2]: SimpleRequirements({"Progressive Crampons": 2}), [0]: SimpleRequirements({"Pipe": 1})})
         ), subregions=[
             PeakRegion("The Great Bulwark", 35, locations=[
                 LocationData("The Great Bulwark: Expert Trophy", POYItemLocationType.ARTEFACT, 13),
@@ -744,7 +759,7 @@ poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
                        generate_free_solo=True),
         ], enable_requirements=lambda options: options.enable_expert),
     ]),
-    POYRegion("DLC", entry_requirements={"Alps Ticket": 1}, subregions=[
+    POYRegion("DLC", entry_requirements=SimpleRequirements({"Alps Ticket": 1}) & LeveledRequirementsV2({[0, 1, 2]: SimpleRequirements({"Progressive Crampons": 1})}), subregions=[
         BookRegion("Essentials", subregions=[
             PeakRegion("Tutor's Tower", 37),
             PeakRegion("Stougr Boulder", 38),
@@ -830,5 +845,6 @@ poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
         ], enable_requirements=lambda options: options.enable_arduous_arctic),
     ], enable_requirements=lambda options: options.enable_dlc,),
 ])
+# poy_regions defines all the regions, their entry requirements, locations and requirements to be included
 all_locations_to_ids: dict[str, int] = poy_regions.get_all_locations_dict()
 ids_to_locations: dict[int, str] = {v: k for k, v in all_locations_to_ids.items()}
