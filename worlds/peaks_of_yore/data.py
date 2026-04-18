@@ -183,6 +183,9 @@ class AllRequirements(Requirements):
             else:
                 self.requirements.append(req)
 
+    def can_reach(self, opts: PeaksOfYoreOptions, state: CollectionState, world: World) -> bool:
+        return all(reqs.can_reach(opts, state, world) for reqs in self.requirements)
+
     def evaluate_items(self, opts: PeaksOfYoreOptions) -> dict[str, int]:
         final: dict[str, int] = {}
         for requirement in self.requirements:
@@ -210,7 +213,7 @@ class AnyRequirements(Requirements):
                 self.requirements.append(req)
 
     def can_reach(self, opts: PeaksOfYoreOptions, state: CollectionState, world: World) -> bool:
-        return all(state.has_all_counts(reqs.evaluate_items(opts), world.player) for reqs in self.requirements)
+        return any(reqs.can_reach(opts, state, world) for reqs in self.requirements)
 
     # returns first set of items with highest priority
     def evaluate_items(self, opts: PeaksOfYoreOptions) -> dict[str, int]:
@@ -240,6 +243,9 @@ class ConditionalRequirements(Requirements):
         self.requirements = requirements
         self.condition = condition
 
+    def can_reach(self, opts: PeaksOfYoreOptions, state: CollectionState, world: World) -> bool:
+        return self.requirements.can_reach(opts, state, world) if self.condition(opts) else True
+
     def evaluate_items(self, opts: PeaksOfYoreOptions) -> dict[str, int]:
         return self.requirements.evaluate_items(opts) if self.condition(opts) else {}
 
@@ -258,20 +264,21 @@ def get_rope_requirement(rope_count: int, start_priority = 0) -> Requirements:
     """
     logging.warning("get_rope_requirement may not work correctly at this time but was used!")
     item_count: int = math.ceil(rope_count/2)
-    min_item_count: int = math.ceil(item_count*0.75)
-    short_rope_addition: int = item_count-min_item_count
-    reqs: Requirements = (SimpleRequirements({"Rope Unlock": 1, "Extra Rope": min_item_count})
-        & (
-            SimpleRequirements({"Extra Rope": short_rope_addition}, 200)   # base case: has required rope count
-            | SimpleRequirements({"Rope Length Upgrade": 1}, 0)               # also accepted with 75% ropes and length upgrade
-        ))
-
-    if short_rope_addition == 0:
-        reqs = SimpleRequirements({"Rope Unlock": 1, "Extra Rope": min_item_count})
-
-    reqs.start_priority = start_priority
-
-    return reqs
+    return SimpleRequirements({"Extra Rope": item_count})
+    # min_item_count: int = math.ceil(item_count*0.75)
+    # short_rope_addition: int = item_count-min_item_count
+    # reqs: Requirements = (SimpleRequirements({"Rope Unlock": 1, "Extra Rope": min_item_count})
+    #     & (
+    #         SimpleRequirements({"Extra Rope": short_rope_addition}, 200)   # base case: has required rope count
+    #         | SimpleRequirements({"Rope Length Upgrade": 1}, 0)               # also accepted with 75% ropes and length upgrade
+    #     ))
+    #
+    # if short_rope_addition == 0:
+    #     reqs = SimpleRequirements({"Rope Unlock": 1, "Extra Rope": min_item_count})
+    #
+    # reqs.start_priority = start_priority
+    #
+    # return reqs
 
 class POYRegion:
     """
