@@ -301,6 +301,10 @@ class IncludeTimeAttack(DefaultOnToggle):
     """Adds beating peak time, hold and rope counts as checks"""
     display_name = "Include Time Attack Challenges"
 
+class IncludeMermaids(DefaultOnToggle):
+    """Adds Mermaids as checks (also adds eagles and goats if DLC is enabled)"""
+    display_name = "Include Mermaids"
+
 # DLC stuffs BELOW
 
 class EnableDLC(Toggle):
@@ -339,7 +343,8 @@ poy_option_groups = [
         EnableExpert,
         DisableSolemnTempest,
         IncludeFreeSolo,
-        IncludeTimeAttack
+        IncludeTimeAttack,
+        IncludeMermaids,
     ]),
     OptionGroup("DLC", [
         EnableDLC,
@@ -399,6 +404,7 @@ class PeaksOfYoreOptions(PerGameCommonOptions):
     disable_solemn_tempest: DisableSolemnTempest
     include_free_solo: IncludeFreeSolo
     include_time_attack: IncludeTimeAttack
+    include_mermaids: IncludeMermaids
     start_inventory_from_pool: StartInventoryPool
     enable_dlc: EnableDLC
     enable_essentials: EnableEssentials

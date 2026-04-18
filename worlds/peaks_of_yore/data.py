@@ -21,6 +21,7 @@ time_attack_time_offset: int = 8000
 time_attack_ropes_offset: int = 9000
 time_attack_holds_offset: int = 10000
 alps_idols_offset: int = 12000
+mermaids_offset: int = 13000
 
 # To whoever is reviewing this, just know that I pray for you
 # I basically rewrote this entire file from scratch, so don't go looking at the differences
@@ -44,6 +45,7 @@ class POYItemLocationType(IntEnum):
     TIMEATTACK_ROPES = 9000
     TIMEATTACK_HOLDS = 10000
     ALPS_IDOLS = 11000
+    MERMAID = 12000
 
 class ItemDataOld:
     """
@@ -126,6 +128,17 @@ class LocationData:
         if self.is_event:
             return None
         return self.id + self.type
+
+class MermaidLocation(LocationData):
+    def __init__(self, name: str, id: int, requirements: Requirements=None, enable_override: Callable[[PeaksOfYoreOptions], bool] = None):
+        enable_mermaids = lambda opts: opts.include_mermaids
+        if enable_override is not None:
+            enable_mermaids = lambda opts: opts.include_mermaids and enable_override(opts)
+        if requirements is None:
+            requirements = SimpleRequirements({"Monocular": 1})
+        else:
+            requirements = requirements & SimpleRequirements({"Monocular": 1})
+        super().__init__(name, POYItemLocationType.MERMAID, id, requirements, enable_mermaids, False)
 
 class Requirements:
     """
@@ -645,7 +658,9 @@ poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
             PeakRegion("Lighthouse", 4),
             PeakRegion("Old Man Of Sjór", 5, locations=[
                 LocationData("Old Man Of Sjór: Climbing Shoe", POYItemLocationType.ARTEFACT, 3),
-                LocationData("Old Man Of Sjór: Rope: Rope", POYItemLocationType.ROPE, 4)
+                LocationData("Old Man Of Sjór: Rope: Rope", POYItemLocationType.ROPE, 4),
+                MermaidLocation("Mermaid #1", 0),
+                MermaidLocation("Mermaid #2", 1),
             ]),
             PeakRegion("Giant's Shelf", 6, locations=[
                 LocationData("Giant's Shelf: Sleeping Bag", POYItemLocationType.ARTEFACT, 5),
@@ -661,13 +676,16 @@ poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
             PeakRegion("Land's End", 10, locations=[
                 LocationData("Land's End: Picture Piece #2", POYItemLocationType.ARTEFACT, 15),
                 LocationData("Land's End: Rope", POYItemLocationType.ROPE, 12),
+                MermaidLocation("Mermaid #3", 2),
             ]),
             PeakRegion("Hangman's Leap", 11, locations=[
                 LocationData("Hangman's Leap: Rope", POYItemLocationType.ROPE, 5),
                 LocationData("Walker Interaction Event", POYItemLocationType.EXTRA, 0, is_event=True),
+                MermaidLocation("Mermaid #4", 3),
             ]),
             PeakRegion("Old Langr", 12, locations=[
                 LocationData("Old Langr: Coffee Box", POYItemLocationType.ARTEFACT, 7),
+                MermaidLocation("Mermaid #5", 4),
             ]),
             PeakRegion("Aldr Grotto", 13, entry_requirements=SimpleRequirements({"Oil Lamp": 1}), locations=[
                 LocationData("Aldr Grotto: Backpack", POYItemLocationType.ARTEFACT, 6),
@@ -675,6 +693,7 @@ poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
             PeakRegion("Three Brothers", 14, locations=[
                 LocationData("Three Brothers: Shovel", POYItemLocationType.ARTEFACT, 4),
                 LocationData("Three Brothers: Bird Seed", POYItemLocationType.BIRDSEED, 0),
+                MermaidLocation("Mermaid #6", 5),
             ]),
             PeakRegion("Walter's Crag", 15, locations=[
                 LocationData("Walter's Crag: Fundamentals Trophy", POYItemLocationType.ARTEFACT, 19),
@@ -692,6 +711,7 @@ poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
             ),
             PeakRegion("Ugsome Storr", 18, locations=[
                 LocationData("Ugsome Storr: Rope", POYItemLocationType.ROPE, 6),
+                MermaidLocation("Mermaid #7", 6),
             ],entry_requirements=LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Progressive Crampons": 1})),
             ),
             PeakRegion("Wuthering Crest", 19, locations=[
@@ -761,8 +781,12 @@ poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
     ]),
     POYRegion("DLC", entry_requirements=SimpleRequirements({"Alps Ticket": 1}) & LeveledRequirementsV2({[0, 1, 2]: SimpleRequirements({"Progressive Crampons": 1})}), subregions=[
         BookRegion("Essentials", subregions=[
-            PeakRegion("Tutor's Tower", 37),
-            PeakRegion("Stougr Boulder", 38),
+            PeakRegion("Tutor's Tower", 37, locations=[
+                MermaidLocation("Great Eagle #1", 12),
+            ]),
+            PeakRegion("Stougr Boulder", 38, locations=[
+                MermaidLocation("Ghostly Goat #4", 10),
+            ]),
             PeakRegion("Mara's Arch", 39, locations=[
                 LocationData("Mara's Arch: Gentiana #1", POYItemLocationType.ARTEFACT, 40),
             ]),
@@ -772,16 +796,19 @@ poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
             PeakRegion("Great Bók Tree", 41, locations=[
                 LocationData("Great Bók Tree: Edelweiss #2", POYItemLocationType.ARTEFACT, 48),
                 LocationData("Great Bók Tree: Idol of Crimps #2", POYItemLocationType.ARTEFACT, 21),
+                MermaidLocation("Ghostly Goat #1", 7),
             ]),
             PeakRegion("Treppenwald", 42, locations=[
                 LocationData("Treppenwald: Gentiana #2", POYItemLocationType.ARTEFACT, 41),
                 LocationData("Treppenwald: Idol of Seeds #1", POYItemLocationType.ARTEFACT, 36),
+                MermaidLocation("Ghostly Goat #2", 8),
             ]),
             PeakRegion("Castle of the Swan King", 43, locations=[
                 LocationData("Castle of the Swan King: Edelweiss #3", POYItemLocationType.ARTEFACT, 49),
                 LocationData("Castle of the Swan King: Idol of Slopers #1", POYItemLocationType.ARTEFACT, 22),
                 LocationData("Castle of the Swan King: Idol of Sundown #1", POYItemLocationType.ARTEFACT, 34),
                 LocationData("Castle of the Swan King: Idol of Pitches #1", POYItemLocationType.ARTEFACT, 26),
+                MermaidLocation("Great Eagle #2", 13),
             ]),
             PeakRegion("Seaside Tribune", 44, locations=[
                 LocationData("Seaside Tribune: Idol of Pinches #2", POYItemLocationType.ARTEFACT, 31),
@@ -795,6 +822,7 @@ poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
             ]),
             PeakRegion("Quietude", 47, locations=[
                 LocationData("Quietude: Gentiana #4", POYItemLocationType.ARTEFACT, 43),
+                MermaidLocation("Great Eagle #4", 15),
             ]),
             PeakRegion("Eljun's Folly", 48, locations=[
                 LocationData("Eljun's Folly: Gentiana #3", POYItemLocationType.ARTEFACT, 42),
@@ -804,16 +832,19 @@ poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
         BookRegion("Alpine Greats", subregions=[
             PeakRegion("Einvald Falls", 49, locations=[
                 LocationData("Eivald Falls: Gentiana #5", POYItemLocationType.ARTEFACT, 44),
+                MermaidLocation("Ghostly Goat #3", 9),
             ]),
             PeakRegion("Almáttr Dam", 50),
             PeakRegion("Dunderhorn", 51, locations=[
                 LocationData("Dunderhorn: Edelweiss #7", POYItemLocationType.ARTEFACT, 53),
                 LocationData("Dunderhorn: Idol of Sundown #2", POYItemLocationType.ARTEFACT, 35),
+                MermaidLocation("Great Eagle #3", 14),
             ]),
             PeakRegion("Mhòr Druim", 52, locations=[
                 LocationData("Mhòr Druim: Idol of Ice #1", POYItemLocationType.ARTEFACT, 28),
                 LocationData("Mhòr Druim: Idol of Feathers #1", POYItemLocationType.ARTEFACT, 24),
                 LocationData("Mhòr Druim: Gentiana #6", POYItemLocationType.ARTEFACT, 45),
+                MermaidLocation("Great Eagle #5", 16),
             ]),
             PeakRegion("Welkin Pass", 53, locations=[
                 LocationData("Welkin Pass: Edeweiss #6", POYItemLocationType.ARTEFACT, 52),
@@ -832,7 +863,7 @@ poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
                 LocationData("Towering Visír: Gentiana #7", POYItemLocationType.ARTEFACT, 46),
                 LocationData("Towering Visír: Edelweiss #1", POYItemLocationType.ARTEFACT, 47),
                 LocationData("Towering Visír: Idol of Pinches #1", POYItemLocationType.ARTEFACT, 30),
-
+                MermaidLocation("Ghostly Goat #5", 11),
             ], generate_free_solo=True),
             PeakRegion("Eldris Wall", 58, locations=[
                 LocationData("Eldris Wall: Idol of Ice #2", POYItemLocationType.ARTEFACT, 29),
