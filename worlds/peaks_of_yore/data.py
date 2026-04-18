@@ -20,6 +20,7 @@ free_solo_peak_offset: int = 7000
 time_attack_time_offset: int = 8000
 time_attack_ropes_offset: int = 9000
 time_attack_holds_offset: int = 10000
+alps_idols_offset: int = 12000
 
 # To whoever is reviewing this, just know that I pray for you
 # I basically rewrote this entire file from scratch, so don't go looking at the differences
@@ -42,6 +43,7 @@ class POYItemLocationType(IntEnum):
     TIMEATTACK_TIME = 8000
     TIMEATTACK_ROPES = 9000
     TIMEATTACK_HOLDS = 10000
+    ALPS_IDOLS = 11000
 
 class ItemDataOld:
     """
@@ -541,28 +543,6 @@ all_items: list[ItemData] = [
     ItemData("Solemn Tempest", 36, ItemClassification.progression, POYItemLocationType.PEAK,
              min_count = 0, is_enabled=lambda options: not options.disable_solemn_tempest),
 
-    # artefacts
-    ItemData("Old Mill: Hat", 0, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData("Evergreen's End: Fisherman's Cap", 1, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData("Old Grove's Skelf: Safety Helmet", 2, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData("Old Man Of Sjór: Climbing Shoe", 3, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData("Three Brothers: Shovel", 4, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData("Giant's Shelf: Sleeping Bag", 5, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData("Aldr Grotto: Backpack", 6, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData("Old Langr: Coffee Box", 7, ItemClassification.useful, POYItemLocationType.ARTEFACT),
-    ItemData("Wuthering Crest: Coffee Box", 8, ItemClassification.useful, POYItemLocationType.ARTEFACT),
-    ItemData("Walker's Pillar: Chalk Box", 9, ItemClassification.useful, POYItemLocationType.ARTEFACT),
-    ItemData("Eldenhorn: Chalk Box", 10, ItemClassification.useful, POYItemLocationType.ARTEFACT),
-    ItemData("Leaning Spire: Intermediate Trophy", 11, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData("Ymir's Shadow: Advanced Trophy", 12, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData("The Great Bulwark: Expert Trophy", 13, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData("Gray Gully: Picture Piece #1", 14, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData("Land's End: Picture Piece #2", 15, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData("The Great Crevice: Picture Piece #3", 16, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData("St. Haelga: Picture Piece #4", 17, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData("Great Gaol: Picture Frame", 18, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData("Walter's Crag: Fundamentals Trophy", 19, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-
     # Bird seeds
     ItemData("Three Brothers: Bird Seed", 0, ItemClassification.useful, POYItemLocationType.BIRDSEED),
     ItemData("Old Skerry: Bird Seed", 1, ItemClassification.useful, POYItemLocationType.BIRDSEED),
@@ -581,43 +561,17 @@ all_items: list[ItemData] = [
     # DLC Items
     ItemData("Alps Ticket", 14, ItemClassification.progression, POYItemLocationType.TOOL, min_count=0),
 
-    # DLC Artefacts
-    ItemData("Crimps Idol #1", 20, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Crimps Idol #2", 21, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Slopers Idol #1", 22, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Slopers Idol #2", 23, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Feathers Idol #1", 24, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Feathers Idol #2", 25, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Pitches Idol #1", 26, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Pitches Idol #2", 27, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Ice Idol #1", 28, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Ice Idol #2", 29, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Pinches Idol #1", 30, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Pinches Idol #2", 31, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Greater Balance Idol #1", 32, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Greater Balance Idol #2", 33, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Sundown Idol #1", 34, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Sundown Idol #2", 35, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Seeds Idol #1", 36, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Seeds Idol #2", 37, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Gravity Idol #1", 38, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Gravity Idol #2", 39, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-
-    ItemData("Gentiana #1", 40, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Gentiana #2", 41, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Gentiana #3", 42, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Gentiana #4", 43, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Gentiana #5", 44, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Gentiana #6", 45, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Gentiana #7", 46, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-
-    ItemData("Edelweiss #1", 47, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Edelweiss #2", 48, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Edelweiss #3", 49, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Edelweiss #4", 50, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Edelweiss #5", 51, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Edelweiss #6", 52, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
-    ItemData("Edelweiss #7", 53, ItemClassification.filler, POYItemLocationType.ARTEFACT, is_enabled=dlc_enabled),
+    # DLC Idols
+    ItemData("Crimps Idol", 0, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
+    ItemData("Slopers Idol", 1, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
+    ItemData("Feathers Idol", 2, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
+    ItemData("Pitches Idol", 3, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
+    ItemData("Ice Idol", 4, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
+    ItemData("Pinches Idol", 5, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
+    ItemData("Greater Balance Idol", 6, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
+    ItemData("Sundown Idol", 7, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
+    ItemData("Seeds Idol", 8, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
+    ItemData("Gravity Idol", 9, ItemClassification.filler, POYItemLocationType.ALPS_IDOLS, is_enabled=dlc_enabled),
 
     # DLC Books
     ItemData("Essentials Book", 4, ItemClassification.progression, POYItemLocationType.BOOK,
@@ -651,8 +605,8 @@ all_items: list[ItemData] = [
     ItemData("Towering Visír", 57, ItemClassification.progression, POYItemLocationType.PEAK, min_count = 0, is_enabled=dlc_enabled),
     ItemData("Eldris Wall", 58, ItemClassification.progression, POYItemLocationType.PEAK, min_count = 0, is_enabled=dlc_enabled),
     ItemData("Mount Mhòrgorm", 59, ItemClassification.progression, POYItemLocationType.PEAK, min_count = 0, is_enabled=dlc_enabled),
-
 ]
+# I could have just made a DLCItemData subclass of ItemData but oh well
 
 item_name_to_id: dict[str, int] = {i.name: i.id + i.type for i in all_items}
 
