@@ -779,7 +779,7 @@ poy_regions: POYRegion = POYRegion("Peaks of Yore", subregions=[
                        generate_free_solo=True),
         ], enable_requirements=lambda options: options.enable_expert),
     ]),
-    POYRegion("DLC", entry_requirements=SimpleRequirements({"Alps Ticket": 1}) & LeveledRequirementsV2({(0, 1, 2): SimpleRequirements({"Progressive Crampons": 1})}), subregions=[
+    POYRegion("DLC", entry_requirements=SimpleRequirements({"Alps Ticket": 1}) & LeveledRequirementsV2({(0, 1, 2): SimpleRequirements({"Progressive Crampons": 1}), (0, 1): SimpleRequirements({"Rope Unlock": 1})}), subregions=[
         BookRegion("Essentials", subregions=[
             PeakRegion("Tutor's Tower", 37, locations=[
                 MermaidLocation("Great Eagle #1", 12),
